@@ -1,6 +1,8 @@
 package pcs
 
 import (
+	"bytes"
+	"compress/gzip"
 	"encoding/json"
 	"errors"
 	"io/ioutil"
@@ -62,7 +64,7 @@ func (p *RunPrecompile) RequiredGas(input []byte) uint64 {
 		duration := new(big.Int).SetBytes(durationBytes).Uint64()
 		totalDuration += duration
 	}
-	return 5000 + nActions*100 + totalDuration*2
+	return 1_000_000 + nActions*100 + totalDuration*2 + 200
 }
 
 type Action struct {
@@ -90,6 +92,27 @@ func decodeActivity(input []byte) []Action {
 	return activity
 }
 
+func compress(data []byte) ([]byte, error) {
+	var buffer bytes.Buffer
+	gz := gzip.NewWriter(&buffer)
+	if _, err := gz.Write(data); err != nil {
+		return nil, err
+	}
+	if err := gz.Close(); err != nil {
+		return nil, err
+	}
+	return buffer.Bytes(), nil
+}
+
+func decompress(data []byte) ([]byte, error) {
+	gz, err := gzip.NewReader(bytes.NewBuffer(data))
+	if err != nil {
+		return nil, err
+	}
+	defer gz.Close()
+	return ioutil.ReadAll(gz)
+}
+
 func (p *RunPrecompile) Run(concrete api.API, input []byte) ([]byte, error) {
 	per := concrete.Persistent()
 
@@ -107,8 +130,17 @@ func (p *RunPrecompile) Run(concrete api.API, input []byte) ([]byte, error) {
 		return nil, errors.New("invalid dynamic hash")
 	}
 
-	static := per.GetPreimage(staticHash)
-	dyn := per.GetPreimage(dynHash)
+	staticZip := per.GetPreimage(staticHash)
+	dynZip := per.GetPreimage(dynHash)
+
+	static, err := decompress(staticZip)
+	if err != nil {
+		return nil, err
+	}
+	dyn, err := decompress(dynZip)
+	if err != nil {
+		return nil, err
+	}
 
 	activity := decodeActivity(activityBytes)
 
@@ -139,8 +171,17 @@ func (p *RunPrecompile) Run(concrete api.API, input []byte) ([]byte, error) {
 		return nil, err
 	}
 
-	staticHash = per.AddPreimage(static)
-	dynHash = per.AddPreimage(dyn)
+	staticZip, err = compress(static)
+	if err != nil {
+		return nil, err
+	}
+	dynZip, err = compress(dyn)
+	if err != nil {
+		return nil, err
+	}
+
+	staticHash = per.AddPreimage(staticZip)
+	dynHash = per.AddPreimage(dynZip)
 
 	return append(staticHash.Bytes(), dynHash.Bytes()...), nil
 }

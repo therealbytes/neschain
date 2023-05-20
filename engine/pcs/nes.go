@@ -60,7 +60,7 @@ func (p *RunPrecompile) RequiredGas(input []byte) uint64 {
 		duration := new(big.Int).SetBytes(durationBytes).Uint64()
 		totalDuration += duration
 	}
-	return 1_000_000 + nActions*100 + totalDuration*2 + 200
+	return 1_000_000 + nActions*100 + totalDuration*2
 }
 
 type Action struct {
@@ -180,7 +180,7 @@ func (p *AddPreimagePrecompile) MutatesStorage(input []byte) bool {
 }
 
 func (p *AddPreimagePrecompile) RequiredGas(input []byte) uint64 {
-	return uint64(200 * len(input))
+	return uint64(100 * len(input))
 }
 
 func (p *AddPreimagePrecompile) Run(concrete api.API, input []byte) ([]byte, error) {

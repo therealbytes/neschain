@@ -23,7 +23,7 @@ interface NES {
         bytes32 staticHash,
         bytes32 dynHash,
         Action[] memory activity
-    ) external;
+    ) external returns (bytes32);
 
-    function addPreimage(bytes32 preimage) external;
+    function addPreimage(bytes memory preimage) external returns (bytes32);
 }

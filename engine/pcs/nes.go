@@ -3,11 +3,11 @@ package pcs
 import (
 	"bytes"
 	"compress/gzip"
+	_ "embed"
 	"encoding/json"
 	"errors"
 	"io/ioutil"
 	"math/big"
-	"os"
 
 	"github.com/ethereum/go-ethereum/accounts/abi"
 	"github.com/ethereum/go-ethereum/common"
@@ -17,33 +17,29 @@ import (
 	"github.com/fogleman/nes/nes"
 )
 
-var ABI abi.ABI
+//go:embed abi/NES.json
+var nesABIJson []byte
+
+var (
+	ABI           abi.ABI
+	NESPrecompile MethodDemux
+)
 
 func init() {
-	// Read file
-	file, err := os.Open("../out/NES.sol/NES.json")
-	if err != nil {
-		panic(err)
-	}
-	defer file.Close()
-	data, err := ioutil.ReadAll(file)
-	if err != nil {
-		panic(err)
-	}
 	// Get ABI
 	var jsonAbi struct {
 		ABI abi.ABI `json:"abi"`
 	}
-	err = json.Unmarshal(data, &jsonAbi)
+	err := json.Unmarshal(nesABIJson, &jsonAbi)
 	if err != nil {
 		panic(err)
 	}
 	ABI = jsonAbi.ABI
-}
-
-var NESPrecompile = MethodDemux{
-	string(ABI.Methods["run"].ID):         &RunPrecompile{},
-	string(ABI.Methods["addPreimage"].ID): &AddPreimagePrecompile{},
+	// Set methods
+	NESPrecompile = MethodDemux{
+		string(ABI.Methods["run"].ID):         &RunPrecompile{},
+		string(ABI.Methods["addPreimage"].ID): &AddPreimagePrecompile{},
+	}
 }
 
 type RunPrecompile struct {
@@ -68,13 +64,14 @@ func (p *RunPrecompile) RequiredGas(input []byte) uint64 {
 }
 
 type Action struct {
-	Button   int
+	Button   uint8
 	Press    bool
-	Duration int
+	Duration uint32
 }
 
 func decodeActivity(input []byte) []Action {
 	var activity []Action
+	_, input = lib.SplitData(input, 32)
 	sizeBytes, input := lib.SplitData(input, 32)
 	size := new(big.Int).SetBytes(sizeBytes).Uint64()
 	for i := uint64(0); i < size; i++ {
@@ -83,9 +80,9 @@ func decodeActivity(input []byte) []Action {
 		pressBytes, actionBytes := lib.SplitData(actionBytes, 32)
 		durationBytes, _ := lib.SplitData(actionBytes, 32)
 		action := Action{
-			Button:   int(new(big.Int).SetBytes(buttonBytes).Uint64()),
+			Button:   uint8(new(big.Int).SetBytes(buttonBytes).Uint64()),
 			Press:    new(big.Int).SetBytes(pressBytes).Uint64() == 1,
-			Duration: int(new(big.Int).SetBytes(durationBytes).Uint64()),
+			Duration: uint32(new(big.Int).SetBytes(durationBytes).Uint64()),
 		}
 		activity = append(activity, action)
 	}
@@ -156,22 +153,12 @@ func (p *RunPrecompile) Run(concrete api.API, input []byte) ([]byte, error) {
 			buttons[action.Button] = action.Press
 		}
 		console.Controller1.SetButtons(buttons)
-		for ii := 0; ii < action.Duration; ii++ {
+		for ii := uint32(0); ii < action.Duration; ii++ {
 			console.Step()
 		}
 	}
 
-	static, err = console.SerializeStatic()
-	if err != nil {
-		return nil, err
-	}
-
 	dyn, err = console.SerializeDynamic()
-	if err != nil {
-		return nil, err
-	}
-
-	staticZip, err = compress(static)
 	if err != nil {
 		return nil, err
 	}
@@ -179,11 +166,9 @@ func (p *RunPrecompile) Run(concrete api.API, input []byte) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	staticHash = per.AddPreimage(staticZip)
 	dynHash = per.AddPreimage(dynZip)
 
-	return append(staticHash.Bytes(), dynHash.Bytes()...), nil
+	return dynHash.Bytes(), nil
 }
 
 type AddPreimagePrecompile struct {
@@ -200,6 +185,10 @@ func (p *AddPreimagePrecompile) RequiredGas(input []byte) uint64 {
 
 func (p *AddPreimagePrecompile) Run(concrete api.API, input []byte) ([]byte, error) {
 	per := concrete.Persistent()
+	_, input = lib.SplitData(input, 32)
+	sizeBytes, dataRaw := lib.SplitData(input, 32)
+	size := new(big.Int).SetBytes(sizeBytes).Uint64()
+	input = dataRaw[:size]
 	hash := crypto.Keccak256Hash(input)
 	if per.HasPreimage(hash) {
 		return hash.Bytes(), nil

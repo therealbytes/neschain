@@ -22,6 +22,49 @@
     {
       "inputs": [
         {
+          "internalType": "uint256",
+          "name": "size",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "_hash",
+          "type": "bytes32"
+        }
+      ],
+      "name": "getPreimage",
+      "outputs": [
+        {
+          "internalType": "bytes",
+          "name": "",
+          "type": "bytes"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "hash",
+          "type": "bytes32"
+        }
+      ],
+      "name": "getPreimageSize",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
           "internalType": "bytes32",
           "name": "staticHash",
           "type": "bytes32"
@@ -78,9 +121,11 @@
   },
   "methodIdentifiers": {
     "addPreimage(bytes)": "0aeee6db",
+    "getPreimage(uint256,bytes32)": "148c8a1a",
+    "getPreimageSize(bytes32)": "e3c6f7cc",
     "run(bytes32,bytes32,(uint8,bool,uint32)[])": "17824ad4"
   },
-  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.15+commit.e14f2714\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"bytes\",\"name\":\"preimage\",\"type\":\"bytes\"}],\"name\":\"addPreimage\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"staticHash\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"dynHash\",\"type\":\"bytes32\"},{\"components\":[{\"internalType\":\"enum Button\",\"name\":\"button\",\"type\":\"uint8\"},{\"internalType\":\"bool\",\"name\":\"press\",\"type\":\"bool\"},{\"internalType\":\"uint32\",\"name\":\"duration\",\"type\":\"uint32\"}],\"internalType\":\"struct Action[]\",\"name\":\"activity\",\"type\":\"tuple[]\"}],\"name\":\"run\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/NES.sol\":\"NES\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[\":ds-test/=lib/forge-std/lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\"]},\"sources\":{\"src/NES.sol\":{\"keccak256\":\"0x42d63037bfe5984d0e709917e46d6a59d4577e60304196ffd8e43a1ff746e93b\",\"license\":\"UNLICENSED\",\"urls\":[\"bzz-raw://e1088a36f1dd938d866a83dc9621e8725c58503444ba99c625d6c07d2bc2d92b\",\"dweb:/ipfs/Qmb34CNVfLaSJ8xHSE2gGmH4SwBVeWZQQPEB6xtuh5zgJM\"]}},\"version\":1}",
+  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.15+commit.e14f2714\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"bytes\",\"name\":\"preimage\",\"type\":\"bytes\"}],\"name\":\"addPreimage\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"size\",\"type\":\"uint256\"},{\"internalType\":\"bytes32\",\"name\":\"_hash\",\"type\":\"bytes32\"}],\"name\":\"getPreimage\",\"outputs\":[{\"internalType\":\"bytes\",\"name\":\"\",\"type\":\"bytes\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"hash\",\"type\":\"bytes32\"}],\"name\":\"getPreimageSize\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"staticHash\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"dynHash\",\"type\":\"bytes32\"},{\"components\":[{\"internalType\":\"enum Button\",\"name\":\"button\",\"type\":\"uint8\"},{\"internalType\":\"bool\",\"name\":\"press\",\"type\":\"bool\"},{\"internalType\":\"uint32\",\"name\":\"duration\",\"type\":\"uint32\"}],\"internalType\":\"struct Action[]\",\"name\":\"activity\",\"type\":\"tuple[]\"}],\"name\":\"run\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/NES.sol\":\"NES\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[\":ds-test/=lib/forge-std/lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\"]},\"sources\":{\"src/NES.sol\":{\"keccak256\":\"0x78f9acc25fdfef0722a9a0ff4dbfb4a35df36068c911f0ad42635454ff6e5f34\",\"license\":\"UNLICENSED\",\"urls\":[\"bzz-raw://5536f913cd072cd822d4f56ebc8e347544bdc54987974f052bfcfea07584de8d\",\"dweb:/ipfs/QmUA7TDY2GXEHnUPeMKXVVpUez4m9yKhjiWumtwxZNtpSL\"]}},\"version\":1}",
   "metadata": {
     "compiler": {
       "version": "0.8.15+commit.e14f2714"
@@ -104,6 +149,49 @@
               "internalType": "bytes32",
               "name": "",
               "type": "bytes32"
+            }
+          ]
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "size",
+              "type": "uint256"
+            },
+            {
+              "internalType": "bytes32",
+              "name": "_hash",
+              "type": "bytes32"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "getPreimage",
+          "outputs": [
+            {
+              "internalType": "bytes",
+              "name": "",
+              "type": "bytes"
+            }
+          ]
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "bytes32",
+              "name": "hash",
+              "type": "bytes32"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "getPreimageSize",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
             }
           ]
         },
@@ -184,10 +272,10 @@
     },
     "sources": {
       "src/NES.sol": {
-        "keccak256": "0x42d63037bfe5984d0e709917e46d6a59d4577e60304196ffd8e43a1ff746e93b",
+        "keccak256": "0x78f9acc25fdfef0722a9a0ff4dbfb4a35df36068c911f0ad42635454ff6e5f34",
         "urls": [
-          "bzz-raw://e1088a36f1dd938d866a83dc9621e8725c58503444ba99c625d6c07d2bc2d92b",
-          "dweb:/ipfs/Qmb34CNVfLaSJ8xHSE2gGmH4SwBVeWZQQPEB6xtuh5zgJM"
+          "bzz-raw://5536f913cd072cd822d4f56ebc8e347544bdc54987974f052bfcfea07584de8d",
+          "dweb:/ipfs/QmUA7TDY2GXEHnUPeMKXVVpUez4m9yKhjiWumtwxZNtpSL"
         ],
         "license": "UNLICENSED"
       }
@@ -196,7 +284,7 @@
   },
   "ast": {
     "absolutePath": "src/NES.sol",
-    "id": 40,
+    "id": 56,
     "exportedSymbols": {
       "Action": [
         18
@@ -205,11 +293,11 @@
         10
       ],
       "NES": [
-        39
+        55
       ]
     },
     "nodeType": "SourceUnit",
-    "src": "39:426:0",
+    "src": "39:596:0",
     "nodes": [
       {
         "id": 1,
@@ -388,13 +476,13 @@
         ],
         "name": "Action",
         "nameLocation": "164:6:0",
-        "scope": 40,
+        "scope": 56,
         "visibility": "public"
       },
       {
-        "id": 39,
+        "id": 55,
         "nodeType": "ContractDefinition",
-        "src": "232:232:0",
+        "src": "232:402:0",
         "nodes": [
           {
             "id": 31,
@@ -545,7 +633,7 @@
               ],
               "src": "375:9:0"
             },
-            "scope": 39,
+            "scope": 55,
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
@@ -629,8 +717,203 @@
               ],
               "src": "452:9:0"
             },
-            "scope": 39,
+            "scope": 55,
             "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "id": 45,
+            "nodeType": "FunctionDefinition",
+            "src": "468:71:0",
+            "nodes": [],
+            "functionSelector": "e3c6f7cc",
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getPreimageSize",
+            "nameLocation": "477:15:0",
+            "parameters": {
+              "id": 41,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 40,
+                  "mutability": "mutable",
+                  "name": "hash",
+                  "nameLocation": "501:4:0",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 45,
+                  "src": "493:12:0",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes32",
+                    "typeString": "bytes32"
+                  },
+                  "typeName": {
+                    "id": 39,
+                    "name": "bytes32",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "493:7:0",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes32",
+                      "typeString": "bytes32"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "492:14:0"
+            },
+            "returnParameters": {
+              "id": 44,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 43,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 45,
+                  "src": "530:7:0",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 42,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "530:7:0",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "529:9:0"
+            },
+            "scope": 55,
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "id": 54,
+            "nodeType": "FunctionDefinition",
+            "src": "545:87:0",
+            "nodes": [],
+            "functionSelector": "148c8a1a",
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getPreimage",
+            "nameLocation": "554:11:0",
+            "parameters": {
+              "id": 50,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 47,
+                  "mutability": "mutable",
+                  "name": "size",
+                  "nameLocation": "574:4:0",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 54,
+                  "src": "566:12:0",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 46,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "566:7:0",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 49,
+                  "mutability": "mutable",
+                  "name": "_hash",
+                  "nameLocation": "588:5:0",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 54,
+                  "src": "580:13:0",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes32",
+                    "typeString": "bytes32"
+                  },
+                  "typeName": {
+                    "id": 48,
+                    "name": "bytes32",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "580:7:0",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes32",
+                      "typeString": "bytes32"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "565:29:0"
+            },
+            "returnParameters": {
+              "id": 53,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 52,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 54,
+                  "src": "618:12:0",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes_memory_ptr",
+                    "typeString": "bytes"
+                  },
+                  "typeName": {
+                    "id": 51,
+                    "name": "bytes",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "618:5:0",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes_storage_ptr",
+                      "typeString": "bytes"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "617:14:0"
+            },
+            "scope": 55,
+            "stateMutability": "view",
             "virtual": false,
             "visibility": "external"
           }
@@ -642,11 +925,11 @@
         "contractKind": "interface",
         "fullyImplemented": false,
         "linearizedBaseContracts": [
-          39
+          55
         ],
         "name": "NES",
         "nameLocation": "242:3:0",
-        "scope": 40,
+        "scope": 56,
         "usedErrors": []
       }
     ],

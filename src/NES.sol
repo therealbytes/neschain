@@ -26,4 +26,8 @@ interface NES {
     ) external returns (bytes32);
 
     function addPreimage(bytes memory preimage) external returns (bytes32);
+
+    function getPreimageSize(bytes32 hash) external view returns (uint256);
+
+    function getPreimage(uint256 size, bytes32 _hash) external view returns (bytes memory);
 }

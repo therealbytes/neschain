@@ -37,20 +37,22 @@ func init() {
 	ABI = jsonAbi.ABI
 	// Set methods
 	NESPrecompile = MethodDemux{
-		string(ABI.Methods["run"].ID):         &RunPrecompile{},
-		string(ABI.Methods["addPreimage"].ID): &AddPreimagePrecompile{},
+		string(ABI.Methods["run"].ID):             &runPrecompile{},
+		string(ABI.Methods["addPreimage"].ID):     &addPreimagePrecompile{},
+		string(ABI.Methods["getPreimageSize"].ID): &getPreimageSizePrecompile{},
+		string(ABI.Methods["getPreimage"].ID):     &getPreimagePrecompile{},
 	}
 }
 
-type RunPrecompile struct {
+type runPrecompile struct {
 	lib.BlankPrecompile
 }
 
-func (p *RunPrecompile) MutatesStorage(input []byte) bool {
+func (p *runPrecompile) MutatesStorage(input []byte) bool {
 	return true
 }
 
-func (p *RunPrecompile) RequiredGas(input []byte) uint64 {
+func (p *runPrecompile) RequiredGas(input []byte) uint64 {
 	actionOffset := uint64(64 + 32)
 	actionBytesRaw := lib.GetData(input, actionOffset, uint64(len(input))-actionOffset)
 	nActions := uint64(len(actionBytesRaw) / 96)
@@ -110,7 +112,7 @@ func decompress(data []byte) ([]byte, error) {
 	return ioutil.ReadAll(gz)
 }
 
-func (p *RunPrecompile) Run(concrete api.API, input []byte) ([]byte, error) {
+func (p *runPrecompile) Run(concrete api.API, input []byte) ([]byte, error) {
 	per := concrete.Persistent()
 
 	staticHashBytes, input := lib.SplitData(input, 32)
@@ -171,19 +173,19 @@ func (p *RunPrecompile) Run(concrete api.API, input []byte) ([]byte, error) {
 	return dynHash.Bytes(), nil
 }
 
-type AddPreimagePrecompile struct {
+type addPreimagePrecompile struct {
 	lib.BlankPrecompile
 }
 
-func (p *AddPreimagePrecompile) MutatesStorage(input []byte) bool {
+func (p *addPreimagePrecompile) MutatesStorage(input []byte) bool {
 	return true
 }
 
-func (p *AddPreimagePrecompile) RequiredGas(input []byte) uint64 {
-	return uint64(100 * len(input))
+func (p *addPreimagePrecompile) RequiredGas(input []byte) uint64 {
+	return uint64(len(input) * 100)
 }
 
-func (p *AddPreimagePrecompile) Run(concrete api.API, input []byte) ([]byte, error) {
+func (p *addPreimagePrecompile) Run(concrete api.API, input []byte) ([]byte, error) {
 	per := concrete.Persistent()
 	_, input = lib.SplitData(input, 32)
 	sizeBytes, dataRaw := lib.SplitData(input, 32)
@@ -195,4 +197,57 @@ func (p *AddPreimagePrecompile) Run(concrete api.API, input []byte) ([]byte, err
 	}
 	per.AddPreimage(input)
 	return hash.Bytes(), nil
+}
+
+type getPreimageSizePrecompile struct {
+	lib.BlankPrecompile
+}
+
+func (p *getPreimageSizePrecompile) MutatesStorage(input []byte) bool {
+	return false
+}
+
+func (p *getPreimageSizePrecompile) RequiredGas(input []byte) uint64 {
+	return 100
+}
+
+func (p *getPreimageSizePrecompile) Run(concrete api.API, input []byte) ([]byte, error) {
+	per := concrete.Persistent()
+	hashBytes := lib.GetData(input, 0, 32)
+	hash := common.BytesToHash(hashBytes)
+	if !per.HasPreimage(hash) {
+		return nil, errors.New("invalid hash")
+	}
+	size := per.GetPreimageSize(hash)
+	sizeBn := new(big.Int).SetUint64(uint64(size))
+	return common.BigToHash(sizeBn).Bytes(), nil
+}
+
+type getPreimagePrecompile struct {
+	lib.BlankPrecompile
+}
+
+func (p *getPreimagePrecompile) MutatesStorage(input []byte) bool {
+	return false
+}
+
+func (p *getPreimagePrecompile) RequiredGas(input []byte) uint64 {
+	sizeBytes := lib.GetData(input, 0, 32)
+	size := new(big.Int).SetBytes(sizeBytes).Uint64()
+	return size * 100
+}
+
+func (p *getPreimagePrecompile) Run(concrete api.API, input []byte) ([]byte, error) {
+	per := concrete.Persistent()
+	sizeBytes, hashBytes := lib.SplitData(input, 32)
+	size := new(big.Int).SetBytes(sizeBytes).Uint64()
+	hash := common.BytesToHash(hashBytes)
+	if !per.HasPreimage(hash) {
+		return nil, errors.New("invalid hash")
+	}
+	actualSize := uint64(per.GetPreimageSize(hash))
+	if actualSize != size {
+		return nil, errors.New("invalid size")
+	}
+	return per.GetPreimage(hash), nil
 }

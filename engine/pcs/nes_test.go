@@ -3,6 +3,7 @@ package pcs
 import (
 	"bytes"
 	_ "embed"
+	"math/big"
 	"testing"
 
 	"github.com/ethereum/go-ethereum/common"
@@ -115,6 +116,47 @@ func TestAddPreimage(t *testing.T) {
 		t.Fatal("preimage not added")
 	}
 }
+
+func TestGetPreimageSize(t *testing.T) {
+	concrete := NewTestAPI()
+	preimage := []byte("hello world")
+	hash := concrete.Persistent().AddPreimage(preimage)
+
+	input, err := ABI.Pack("getPreimageSize", hash)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	output, err := NESPrecompile.Run(concrete, input)
+	if err != nil {
+		t.Fatal(err)
+	}
+	outSize := int(new(big.Int).SetBytes(output).Uint64())
+
+	if outSize != len(preimage) {
+		t.Fatal("wrong output")
+	}
+}
+
+func TestGetPreimage(t *testing.T) {
+	concrete := NewTestAPI()
+	preimage := []byte("hello world")
+	hash := concrete.Persistent().AddPreimage(preimage)
+	input, err := ABI.Pack("getPreimage", big.NewInt(int64(len(preimage))), hash)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	output, err := NESPrecompile.Run(concrete, input)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if !bytes.Equal(output, preimage) {
+		t.Fatal("wrong output")
+	}
+}
+
 func TestCompression(t *testing.T) {
 	data := []byte("hello world")
 	compressed, err := compress(data)

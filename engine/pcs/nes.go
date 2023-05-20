@@ -74,13 +74,13 @@ type Action struct {
 func decodeActivity(input []byte) []Action {
 	var activity []Action
 	_, input = lib.SplitData(input, 32)
-	sizeBytes, input := lib.SplitData(input, 32)
+	sizeBytes, activityBytes := lib.SplitData(input, 32)
 	size := new(big.Int).SetBytes(sizeBytes).Uint64()
 	for i := uint64(0); i < size; i++ {
-		actionBytes := lib.GetData(input, i*3*32, 3*32)
-		buttonBytes, actionBytes := lib.SplitData(actionBytes, 32)
-		pressBytes, actionBytes := lib.SplitData(actionBytes, 32)
-		durationBytes, _ := lib.SplitData(actionBytes, 32)
+		actionBytes := lib.GetData(activityBytes, i*3*32, 3*32)
+		buttonBytes := lib.GetData(actionBytes, 0, 32)
+		pressBytes := lib.GetData(actionBytes, 32, 32)
+		durationBytes := lib.GetData(actionBytes, 64, 32)
 		action := Action{
 			Button:   uint8(new(big.Int).SetBytes(buttonBytes).Uint64()),
 			Press:    new(big.Int).SetBytes(pressBytes).Uint64() == 1,
@@ -115,9 +115,9 @@ func decompress(data []byte) ([]byte, error) {
 func (p *runPrecompile) Run(concrete api.API, input []byte) ([]byte, error) {
 	per := concrete.Persistent()
 
-	staticHashBytes, input := lib.SplitData(input, 32)
-	dynHashBytes, input := lib.SplitData(input, 32)
-	activityBytes := input
+	staticHashBytes := lib.GetData(input, 0, 32)
+	dynHashBytes := lib.GetData(input, 32, 32)
+	activityBytes := lib.GetData(input, 64, uint64(len(input))-64)
 
 	staticHash := common.BytesToHash(staticHashBytes)
 	dynHash := common.BytesToHash(dynHashBytes)
@@ -190,12 +190,12 @@ func (p *addPreimagePrecompile) Run(concrete api.API, input []byte) ([]byte, err
 	_, input = lib.SplitData(input, 32)
 	sizeBytes, dataRaw := lib.SplitData(input, 32)
 	size := new(big.Int).SetBytes(sizeBytes).Uint64()
-	input = dataRaw[:size]
-	hash := crypto.Keccak256Hash(input)
+	preimage := lib.GetData(dataRaw, 0, size)
+	hash := crypto.Keccak256Hash(preimage)
 	if per.HasPreimage(hash) {
 		return hash.Bytes(), nil
 	}
-	per.AddPreimage(input)
+	per.AddPreimage(preimage)
 	return hash.Bytes(), nil
 }
 
@@ -239,7 +239,8 @@ func (p *getPreimagePrecompile) RequiredGas(input []byte) uint64 {
 
 func (p *getPreimagePrecompile) Run(concrete api.API, input []byte) ([]byte, error) {
 	per := concrete.Persistent()
-	sizeBytes, hashBytes := lib.SplitData(input, 32)
+	sizeBytes := lib.GetData(input, 0, 32)
+	hashBytes := lib.GetData(input, 0, 32)
 	size := new(big.Int).SetBytes(sizeBytes).Uint64()
 	hash := common.BytesToHash(hashBytes)
 	if !per.HasPreimage(hash) {

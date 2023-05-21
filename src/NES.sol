@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.13;
 
+address constant NES_ADDRESS = address(0x80);
+
 enum Button {
     A,
     B,

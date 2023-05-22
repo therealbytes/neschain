@@ -130,16 +130,16 @@ func (p *runPrecompile) Run(concrete api.API, input []byte) ([]byte, error) {
 	}
 
 	staticZip := per.GetPreimage(staticHash)
-	dynZip := per.GetPreimage(dynHash)
+	dyn := per.GetPreimage(dynHash)
 
 	static, err := decompress(staticZip)
 	if err != nil {
 		return nil, err
 	}
-	dyn, err := decompress(dynZip)
-	if err != nil {
-		return nil, err
-	}
+	// dyn, err := decompress(dynZip)
+	// if err != nil {
+	// 	return nil, err
+	// }
 
 	activity := decodeActivity(activityBytes)
 
@@ -164,11 +164,11 @@ func (p *runPrecompile) Run(concrete api.API, input []byte) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	dynZip, err = compress(dyn)
-	if err != nil {
-		return nil, err
-	}
-	dynHash = per.AddPreimage(dynZip)
+	// dynZip, err = compress(dyn)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	dynHash = per.AddPreimage(dyn)
 
 	return dynHash.Bytes(), nil
 }

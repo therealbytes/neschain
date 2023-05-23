@@ -37,17 +37,8 @@ func NewTestAPIWithStateDB(statedb vm.StateDB, addr common.Address) api.API {
 func TestRun(t *testing.T) {
 	concrete := NewTestAPI()
 
-	staticZip, err := compress(testStatic)
-	if err != nil {
-		t.Fatal(err)
-	}
-	dynZip, err := compress(testDyn)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	staticHash := concrete.Persistent().AddPreimage(staticZip)
-	dynHash := concrete.Persistent().AddPreimage(dynZip)
+	staticHash := concrete.Persistent().AddPreimage(testStatic)
+	dynHash := concrete.Persistent().AddPreimage(testDyn)
 
 	activity := []Action{
 		{Button: 0, Press: false, Duration: 100_000},
@@ -84,14 +75,14 @@ func TestRun(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	refOutDynZip, err := compress(refOutDyn)
-	if err != nil {
-		t.Fatal(err)
-	}
-	refOutDynHash := crypto.Keccak256Hash(refOutDynZip)
+	refOutDynHash := crypto.Keccak256Hash(refOutDyn)
 
 	if outDynHash != refOutDynHash {
 		t.Fatal("wrong output")
+	}
+
+	if !concrete.Persistent().HasPreimage(outDynHash) {
+		t.Fatal("preimage not added")
 	}
 }
 
@@ -153,21 +144,6 @@ func TestGetPreimage(t *testing.T) {
 	}
 
 	if !bytes.Equal(output, preimage) {
-		t.Fatal("wrong output")
-	}
-}
-
-func TestCompression(t *testing.T) {
-	data := []byte("hello world")
-	compressed, err := compress(data)
-	if err != nil {
-		t.Fatal(err)
-	}
-	decompressed, err := decompress(compressed)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if !bytes.Equal(data, decompressed) {
 		t.Fatal("wrong output")
 	}
 }

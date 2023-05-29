@@ -22,13 +22,6 @@ var (
 	NESPrecompile api.Precompile
 )
 
-var methodPrecompiles = map[string]MethodPrecompile{
-	"run":             &runPrecompile{},
-	"addPreimage":     &addPreimagePrecompile{},
-	"getPreimageSize": &getPreimageSizePrecompile{},
-	"getPreimage":     &getPreimagePrecompile{},
-}
-
 func init() {
 	var jsonAbi struct {
 		ABI abi.ABI `json:"abi"`
@@ -38,7 +31,12 @@ func init() {
 		panic(err)
 	}
 	ABI = jsonAbi.ABI
-	NESPrecompile = NewPrecompileWithABI(ABI, methodPrecompiles)
+	NESPrecompile = NewPrecompileWithABI(ABI, map[string]MethodPrecompile{
+		"run":             &runPrecompile{},
+		"addPreimage":     &addPreimagePrecompile{},
+		"getPreimageSize": &getPreimageSizePrecompile{},
+		"getPreimage":     &getPreimagePrecompile{},
+	})
 }
 
 type runPrecompile struct {

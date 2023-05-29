@@ -19,11 +19,17 @@ var nesABIJson []byte
 
 var (
 	ABI           abi.ABI
-	NESPrecompile MethodDemux
+	NESPrecompile api.Precompile
 )
 
+var methodPrecompiles = map[string]MethodPrecompile{
+	"run":             &runPrecompile{},
+	"addPreimage":     &addPreimagePrecompile{},
+	"getPreimageSize": &getPreimageSizePrecompile{},
+	"getPreimage":     &getPreimagePrecompile{},
+}
+
 func init() {
-	// Get ABI
 	var jsonAbi struct {
 		ABI abi.ABI `json:"abi"`
 	}
@@ -32,28 +38,18 @@ func init() {
 		panic(err)
 	}
 	ABI = jsonAbi.ABI
-	// Set methods
-	NESPrecompile = MethodDemux{
-		string(ABI.Methods["run"].ID):             &runPrecompile{},
-		string(ABI.Methods["addPreimage"].ID):     &addPreimagePrecompile{},
-		string(ABI.Methods["getPreimageSize"].ID): &getPreimageSizePrecompile{},
-		string(ABI.Methods["getPreimage"].ID):     &getPreimagePrecompile{},
-	}
+	NESPrecompile = NewPrecompileWithABI(ABI, methodPrecompiles)
 }
 
 type runPrecompile struct {
-	lib.BlankPrecompile
+	BlankMethodPrecompile
 }
 
-func (p *runPrecompile) unpackValues(input []byte) (common.Hash, common.Hash, []struct {
+func (p *runPrecompile) typeAssertArgs(args []interface{}) (common.Hash, common.Hash, []struct {
 	Button   uint8  "json:\"button\""
 	Press    bool   "json:\"press\""
 	Duration uint32 "json:\"duration\""
 }, error) {
-	args, err := ABI.Methods["run"].Inputs.UnpackValues(input)
-	if err != nil {
-		return common.Hash{}, common.Hash{}, nil, err
-	}
 	staticHash := common.Hash(args[0].([32]byte))
 	dynHash := common.Hash(args[1].([32]byte))
 	activity := args[2].([]struct {
@@ -64,73 +60,69 @@ func (p *runPrecompile) unpackValues(input []byte) (common.Hash, common.Hash, []
 	return staticHash, dynHash, activity, nil
 }
 
-func (p *runPrecompile) MutatesStorage(input []byte) bool {
-	return true
-}
-
 func (p *runPrecompile) RequiredGas(input []byte) uint64 {
-	_, _, activity, err := p.unpackValues(input)
-	if err != nil {
-		return 0
-	}
-	nActions := len(activity)
-	totalDuration := uint32(0)
-	for _, action := range activity {
-		totalDuration += action.Duration
-	}
-	return 500_000 + uint64(nActions)*100 + uint64(totalDuration)*3
+	return p.CallRequiredGasWithArgs(func(args []interface{}) uint64 {
+		_, _, activity, err := p.typeAssertArgs(args)
+		if err != nil {
+			return 0
+		}
+		nActions := len(activity)
+		totalDuration := uint32(0)
+		for _, action := range activity {
+			totalDuration += action.Duration
+		}
+		return 500_000 + uint64(nActions)*100 + uint64(totalDuration)*3
+	}, input)
 }
 
 func (p *runPrecompile) Run(concrete api.API, input []byte) ([]byte, error) {
-	per := concrete.Persistent()
+	return p.CallRunWithArgs(func(concrete api.API, args []interface{}) ([]interface{}, error) {
+		per := concrete.Persistent()
 
-	staticHash, dynHash, activity, err := p.unpackValues(input)
-	if err != nil {
-		return nil, err
-	}
-
-	static := per.GetPreimage(staticHash)
-	if len(static) == 0 {
-		return nil, errors.New("invalid static hash")
-	}
-
-	dyn := per.GetPreimage(dynHash)
-	if len(dyn) == 0 {
-		return nil, errors.New("invalid dynamic hash")
-	}
-
-	console, err := nes.NewHeadlessConsole(static, dyn)
-	if err != nil {
-		return nil, err
-	}
-
-	buttons := [8]bool{}
-
-	for _, action := range activity {
-		if action.Button < 8 {
-			buttons[action.Button] = action.Press
+		staticHash, dynHash, activity, err := p.typeAssertArgs(args)
+		if err != nil {
+			return nil, err
 		}
-		console.Controller1.SetButtons(buttons)
-		for ii := uint32(0); ii < action.Duration; ii++ {
-			console.Step()
+
+		static := per.GetPreimage(staticHash)
+		if len(static) == 0 {
+			return nil, errors.New("invalid static hash")
 		}
-	}
 
-	dyn, err = console.SerializeDynamic()
-	if err != nil {
-		return nil, err
-	}
-	dynHash = per.AddPreimage(dyn)
+		dyn := per.GetPreimage(dynHash)
+		if len(dyn) == 0 {
+			return nil, errors.New("invalid dynamic hash")
+		}
 
-	return dynHash.Bytes(), nil
+		console, err := nes.NewHeadlessConsole(static, dyn)
+		if err != nil {
+			return nil, err
+		}
+
+		buttons := [8]bool{}
+
+		for _, action := range activity {
+			if action.Button < 8 {
+				buttons[action.Button] = action.Press
+			}
+			console.Controller1.SetButtons(buttons)
+			for ii := uint32(0); ii < action.Duration; ii++ {
+				console.Step()
+			}
+		}
+
+		dyn, err = console.SerializeDynamic()
+		if err != nil {
+			return nil, err
+		}
+		dynHash = per.AddPreimage(dyn)
+
+		return []interface{}{dynHash}, nil
+	}, concrete, input)
 }
 
 type addPreimagePrecompile struct {
-	lib.BlankPrecompile
-}
-
-func (p *addPreimagePrecompile) MutatesStorage(input []byte) bool {
-	return true
+	BlankMethodPrecompile
 }
 
 func (p *addPreimagePrecompile) RequiredGas(input []byte) uint64 {
@@ -140,26 +132,20 @@ func (p *addPreimagePrecompile) RequiredGas(input []byte) uint64 {
 }
 
 func (p *addPreimagePrecompile) Run(concrete api.API, input []byte) ([]byte, error) {
-	per := concrete.Persistent()
-	args, err := ABI.Methods["addPreimage"].Inputs.UnpackValues(input)
-	if err != nil {
-		return nil, err
-	}
-	preimage := args[0].([]byte)
-	hash := crypto.Keccak256Hash(preimage)
-	if per.HasPreimage(hash) {
-		return hash.Bytes(), nil
-	}
-	per.AddPreimage(preimage)
-	return hash.Bytes(), nil
+	return p.CallRunWithArgs(func(concrete api.API, args []interface{}) ([]interface{}, error) {
+		per := concrete.Persistent()
+		preimage := args[0].([]byte)
+		hash := crypto.Keccak256Hash(preimage)
+		if per.HasPreimage(hash) {
+			return []interface{}{hash}, nil
+		}
+		per.AddPreimage(preimage)
+		return []interface{}{hash}, nil
+	}, concrete, input)
 }
 
 type getPreimageSizePrecompile struct {
-	lib.BlankPrecompile
-}
-
-func (p *getPreimageSizePrecompile) MutatesStorage(input []byte) bool {
-	return false
+	BlankMethodPrecompile
 }
 
 func (p *getPreimageSizePrecompile) RequiredGas(input []byte) uint64 {
@@ -167,26 +153,20 @@ func (p *getPreimageSizePrecompile) RequiredGas(input []byte) uint64 {
 }
 
 func (p *getPreimageSizePrecompile) Run(concrete api.API, input []byte) ([]byte, error) {
-	per := concrete.Persistent()
-	args, err := ABI.Methods["getPreimageSize"].Inputs.UnpackValues(input)
-	if err != nil {
-		return nil, err
-	}
-	hash := common.Hash(args[0].([32]byte))
-	if !per.HasPreimage(hash) {
-		return nil, errors.New("invalid hash")
-	}
-	size := per.GetPreimageSize(hash)
-	sizeBn := new(big.Int).SetUint64(uint64(size))
-	return common.BigToHash(sizeBn).Bytes(), nil
+	return p.CallRunWithArgs(func(concrete api.API, args []interface{}) ([]interface{}, error) {
+		per := concrete.Persistent()
+		hash := common.Hash(args[0].([32]byte))
+		if !per.HasPreimage(hash) {
+			return nil, errors.New("invalid hash")
+		}
+		size := per.GetPreimageSize(hash)
+		sizeBn := new(big.Int).SetUint64(uint64(size))
+		return []interface{}{sizeBn}, nil
+	}, concrete, input)
 }
 
 type getPreimagePrecompile struct {
-	lib.BlankPrecompile
-}
-
-func (p *getPreimagePrecompile) MutatesStorage(input []byte) bool {
-	return false
+	BlankMethodPrecompile
 }
 
 func (p *getPreimagePrecompile) RequiredGas(input []byte) uint64 {
@@ -196,19 +176,18 @@ func (p *getPreimagePrecompile) RequiredGas(input []byte) uint64 {
 }
 
 func (p *getPreimagePrecompile) Run(concrete api.API, input []byte) ([]byte, error) {
-	per := concrete.Persistent()
-	args, err := ABI.Methods["getPreimage"].Inputs.UnpackValues(input)
-	if err != nil {
-		return nil, err
-	}
-	size := args[0].(*big.Int).Uint64()
-	hash := common.Hash(args[1].([32]byte))
-	if !per.HasPreimage(hash) {
-		return nil, errors.New("invalid hash")
-	}
-	actualSize := per.GetPreimageSize(hash)
-	if uint64(actualSize) != size {
-		return nil, errors.New("invalid size")
-	}
-	return per.GetPreimage(hash), nil
+	return p.CallRunWithArgs(func(concrete api.API, args []interface{}) ([]interface{}, error) {
+		per := concrete.Persistent()
+		size := args[0].(*big.Int).Uint64()
+		hash := common.Hash(args[1].([32]byte))
+		if !per.HasPreimage(hash) {
+			return nil, errors.New("invalid hash")
+		}
+		actualSize := per.GetPreimageSize(hash)
+		if uint64(actualSize) != size {
+			return nil, errors.New("invalid size")
+		}
+		preimage := per.GetPreimage(hash)
+		return []interface{}{preimage}, nil
+	}, concrete, input)
 }

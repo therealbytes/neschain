@@ -40,7 +40,11 @@ func TestRun(t *testing.T) {
 	staticHash := concrete.Persistent().AddPreimage(testStatic)
 	dynHash := concrete.Persistent().AddPreimage(testDyn)
 
-	activity := []Action{
+	activity := []struct {
+		Button   uint8
+		Press    bool
+		Duration uint32
+	}{
 		{Button: 0, Press: false, Duration: 100_000},
 	}
 

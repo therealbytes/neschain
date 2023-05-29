@@ -36,11 +36,13 @@ func NewTestAPIWithStateDB(statedb vm.StateDB, addr common.Address) api.API {
 
 func TestRun(t *testing.T) {
 	concrete := NewTestAPI()
-
 	staticHash := concrete.Persistent().AddPreimage(testStatic)
 	dynHash := concrete.Persistent().AddPreimage(testDyn)
-
-	activity := []Action{
+	activity := []struct {
+		Button   uint8
+		Press    bool
+		Duration uint32
+	}{
 		{Button: 0, Press: false, Duration: 100_000},
 	}
 
@@ -58,7 +60,6 @@ func TestRun(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-
 	outDynHash := common.Hash(_outDynHash[0].([32]byte))
 
 	refNes, err := nes.NewHeadlessConsole(testStatic, testDyn)
@@ -78,7 +79,7 @@ func TestRun(t *testing.T) {
 	refOutDynHash := crypto.Keccak256Hash(refOutDyn)
 
 	if outDynHash != refOutDynHash {
-		t.Fatal("wrong output")
+		t.Fatal("output mismatch: got", outDynHash, "expected", refOutDynHash)
 	}
 
 	if !concrete.Persistent().HasPreimage(outDynHash) {
@@ -89,6 +90,7 @@ func TestRun(t *testing.T) {
 func TestAddPreimage(t *testing.T) {
 	concrete := NewTestAPI()
 	preimage := []byte("hello world")
+
 	input, err := ABI.Pack("addPreimage", preimage)
 	if err != nil {
 		t.Fatal(err)
@@ -98,10 +100,15 @@ func TestAddPreimage(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	hash := common.BytesToHash(output)
+
+	_hash, err := ABI.Unpack("addPreimage", output)
+	if err != nil {
+		t.Fatal(err)
+	}
+	hash := common.Hash(_hash[0].([32]byte))
 
 	if hash != crypto.Keccak256Hash(preimage) {
-		t.Fatal("wrong output")
+		t.Fatal("output mismatch: got", hash, "expected", crypto.Keccak256Hash(preimage))
 	}
 	if !concrete.Persistent().HasPreimage(hash) {
 		t.Fatal("preimage not added")
@@ -122,10 +129,15 @@ func TestGetPreimageSize(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	outSize := int(new(big.Int).SetBytes(output).Uint64())
+
+	_outSize, err := ABI.Unpack("getPreimageSize", output)
+	if err != nil {
+		t.Fatal(err)
+	}
+	outSize := int(_outSize[0].(*big.Int).Uint64())
 
 	if outSize != len(preimage) {
-		t.Fatal("wrong output")
+		t.Fatal("output mismatch: got", outSize, "expected", len(preimage))
 	}
 }
 
@@ -133,6 +145,7 @@ func TestGetPreimage(t *testing.T) {
 	concrete := NewTestAPI()
 	preimage := []byte("hello world")
 	hash := concrete.Persistent().AddPreimage(preimage)
+
 	input, err := ABI.Pack("getPreimage", big.NewInt(int64(len(preimage))), hash)
 	if err != nil {
 		t.Fatal(err)
@@ -143,7 +156,13 @@ func TestGetPreimage(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if !bytes.Equal(output, preimage) {
-		t.Fatal("wrong output")
+	_outPreimage, err := ABI.Unpack("getPreimage", output)
+	if err != nil {
+		t.Fatal(err)
+	}
+	outPreimage := _outPreimage[0].([]byte)
+
+	if !bytes.Equal(outPreimage, preimage) {
+		t.Fatal("output mismatch: got", output, "expected", preimage)
 	}
 }

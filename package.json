@@ -1,12 +1,8 @@
 {
   "name": "neschain",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "version": "0.1.0",
+  "description": "A concrete rollup implementing a NES-emulator precompile",
+  "scripts": {},
+  "author": "therealbyt3s@gmail.com",
+  "license": "MIT"
 }

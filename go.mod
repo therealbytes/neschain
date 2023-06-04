@@ -2,12 +2,12 @@ module github.com/therealbytes/neschain
 
 go 1.18
 
-replace github.com/fogleman/nes => github.com/therealbytes/nes v0.0.0-20230520140439-926367a99db8
+replace github.com/fogleman/nes => github.com/therealbytes/nes v0.0.0-20230529152044-bd334b2d1049
 
-replace github.com/ethereum/go-ethereum => github.com/therealbytes/concrete-geth v0.0.0-20230518143737-14e116b335b8
+replace github.com/ethereum/go-ethereum => github.com/therealbytes/concrete-geth v0.0.0-20230604124028-79ab8144f0ac
 
 require (
-	github.com/ethereum/go-ethereum v1.10.26
+	github.com/ethereum/go-ethereum v1.11.6
 	github.com/fogleman/nes v0.0.0-00010101000000-000000000000
 )
 
@@ -37,7 +37,7 @@ require (
 	github.com/gballet/go-libpcsclite v0.0.0-20190607065134-2772fd86a8ff // indirect
 	github.com/gballet/go-verkle v0.0.0-20220902153445-097bd83b7732 // indirect
 	github.com/getsentry/sentry-go v0.18.0 // indirect
-	github.com/go-ole/go-ole v1.2.1 // indirect
+	github.com/go-ole/go-ole v1.2.6 // indirect
 	github.com/go-sourcemap/sourcemap v2.1.3+incompatible // indirect
 	github.com/go-stack/stack v1.8.1 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
@@ -45,7 +45,7 @@ require (
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/google/uuid v1.3.0 // indirect
-	github.com/gorilla/websocket v1.4.2 // indirect
+	github.com/gorilla/websocket v1.5.0 // indirect
 	github.com/graph-gophers/graphql-go v1.3.0 // indirect
 	github.com/hashicorp/go-bexpr v0.1.10 // indirect
 	github.com/holiman/big v0.0.0-20221017200358-a027dc42d04e // indirect
@@ -85,8 +85,8 @@ require (
 	github.com/status-im/keycard-go v0.2.0 // indirect
 	github.com/syndtr/goleveldb v1.0.1-0.20210819022825-2ae1ddf74ef7 // indirect
 	github.com/tetratelabs/wazero v1.1.0 // indirect
-	github.com/tklauser/go-sysconf v0.3.5 // indirect
-	github.com/tklauser/numcpus v0.2.2 // indirect
+	github.com/tklauser/go-sysconf v0.3.10 // indirect
+	github.com/tklauser/numcpus v0.4.0 // indirect
 	github.com/tyler-smith/go-bip39 v1.1.0 // indirect
 	github.com/urfave/cli/v2 v2.17.2-0.20221006022127-8f469abc00aa // indirect
 	github.com/xrash/smetrics v0.0.0-20201216005158-039620a65673 // indirect

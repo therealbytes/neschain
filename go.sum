@@ -831,8 +831,8 @@ github.com/tdewolff/parse/v2 v2.6.4/go.mod h1:woz0cgbLwFdtbjJu8PIKxhW05KplTFQkOd
 github.com/tdewolff/test v1.0.7/go.mod h1:6DAvZliBAAnD7rhVgwaM7DE5/d9NMOAJ09SqYqeK4QE=
 github.com/tetratelabs/wazero v1.1.0 h1:EByoAhC+QcYpwSZJSs/aV0uokxPwBgKxfiokSUwAknQ=
 github.com/tetratelabs/wazero v1.1.0/go.mod h1:wYx2gNRg8/WihJfSDxA1TIL8H+GkfLYm+bIfbblu9VQ=
-github.com/therealbytes/concrete-geth v0.0.0-20230604124028-79ab8144f0ac h1:MIAjhhRAFknCkVHAvQ8Lsuoes9itpkIc7Q08sJraX+8=
-github.com/therealbytes/concrete-geth v0.0.0-20230604124028-79ab8144f0ac/go.mod h1:rqG8+GYvAqMwiqJ2e9+/E0QwSiRcwYmPRUDblWxn8xo=
+github.com/therealbytes/concrete-geth v0.0.0-20230604141529-970d2f2762e9 h1:AIulzRJKeVjn7VBj70R9PX6z1gFahYtsJEHfu399dWc=
+github.com/therealbytes/concrete-geth v0.0.0-20230604141529-970d2f2762e9/go.mod h1:rqG8+GYvAqMwiqJ2e9+/E0QwSiRcwYmPRUDblWxn8xo=
 github.com/therealbytes/nes v0.0.0-20230529152044-bd334b2d1049 h1:CF4lkTFL7ADkAkoQB/2hB/lwfd68LCI3tVq3vqe+v0I=
 github.com/therealbytes/nes v0.0.0-20230529152044-bd334b2d1049/go.mod h1:ziwtMUbMCbnfpRS7uc9FOELgxDAFUKsZbhLQFkHu7r0=
 github.com/tinylib/msgp v1.0.2/go.mod h1:+d+yLhGm8mzTaHzB+wgMYrodPfmZrzkirds8fDWklFE=

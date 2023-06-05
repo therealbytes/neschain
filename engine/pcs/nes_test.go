@@ -37,41 +37,44 @@ func TestRun(t *testing.T) {
 	staticHash := preimageStore.AddPreimage(testStatic)
 	dynHash := preimageStore.AddPreimage(testDyn)
 
-	input, err := ABI.Pack("run", staticHash, dynHash, activity)
-	if err != nil {
-		t.Fatal(err)
-	}
-	output, err := NESPrecompile.Run(concrete, input)
-	if err != nil {
-		t.Fatal(err)
-	}
+	for ii := 0; ii < 3; ii++ {
+		input, err := ABI.Pack("run", staticHash, dynHash, activity)
+		if err != nil {
+			t.Fatal(err)
+		}
+		output, err := NESPrecompile.Run(concrete, input)
+		if err != nil {
+			t.Fatal(err)
+		}
+		_outDynHash, err := ABI.Unpack("run", output)
+		if err != nil {
+			t.Fatal(err)
+		}
+		outDynHash := common.Hash(_outDynHash[0].([32]byte))
+		if !preimageStore.HasPreimage(outDynHash) {
+			t.Fatal("preimage not added")
+		}
+		outDyn := preimageStore.GetPreimage(outDynHash)
 
-	_outDynHash, err := ABI.Unpack("run", output)
-	if err != nil {
-		t.Fatal(err)
-	}
-	outDynHash := common.Hash(_outDynHash[0].([32]byte))
+		refStatic := preimageStore.GetPreimage(staticHash)
+		refInDyn := preimageStore.GetPreimage(dynHash)
+		refNes, err := nes.NewHeadlessConsole(refStatic, refInDyn, false, false)
+		if err != nil {
+			t.Fatal(err)
+		}
+		runActivity(refNes, activity)
+		refOutDyn, err := refNes.SerializeDynamic()
+		if err != nil {
+			t.Fatal(err)
+		}
 
-	refNes, err := nes.NewHeadlessConsole(testStatic, testDyn, false, false)
-	if err != nil {
-		t.Fatal(err)
-	}
-	runActivity(refNes, activity)
-	refOutDyn, err := refNes.SerializeDynamic()
-	if err != nil {
-		t.Fatal(err)
-	}
+		if len(outDyn) != len(refOutDyn) {
+			t.Fatal("dyn length mismatch")
+		}
+		if !bytes.Equal(outDyn, refOutDyn) {
+			t.Fatal("dyn mismatch")
+		}
 
-	if !preimageStore.HasPreimage(outDynHash) {
-		t.Fatal("preimage not added")
-	}
-
-	outDyn := preimageStore.GetPreimage(outDynHash)
-
-	if len(outDyn) != len(refOutDyn) {
-		t.Fatal("dyn length mismatch")
-	}
-	if !bytes.Equal(outDyn, refOutDyn) {
-		t.Fatal("dyn mismatch")
+		dynHash = outDynHash
 	}
 }

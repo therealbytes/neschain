@@ -9,6 +9,7 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/concrete/api"
 	"github.com/ethereum/go-ethereum/concrete/lib"
+	"github.com/ethereum/go-ethereum/concrete/precompiles"
 	"github.com/fogleman/nes/nes"
 )
 
@@ -16,13 +17,13 @@ import (
 var nesABIJson []byte
 
 var (
-	ABI           abi.ABI
-	NESPrecompile api.Precompile
+	Radix    = precompiles.BigPreimageStoreRadix
+	LeafSize = precompiles.BigPreimageStoreLeafSize
 )
 
 var (
-	Radix    = 16
-	LeafSize = 512
+	ABI           abi.ABI
+	NESPrecompile api.Precompile
 )
 
 type Activity = []struct {

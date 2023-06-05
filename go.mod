@@ -4,7 +4,7 @@ go 1.18
 
 replace github.com/fogleman/nes => github.com/therealbytes/nes v0.0.0-20230529152044-bd334b2d1049
 
-replace github.com/ethereum/go-ethereum => github.com/therealbytes/concrete-geth v0.0.0-20230604141529-970d2f2762e9
+replace github.com/ethereum/go-ethereum => github.com/therealbytes/concrete-geth v0.0.0-20230605122711-e86d9fd4ea96
 
 require (
 	github.com/ethereum/go-ethereum v1.11.6

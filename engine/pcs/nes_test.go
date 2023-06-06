@@ -29,6 +29,8 @@ func TestRun(t *testing.T) {
 		concrete   = api.New(evm.NewConcreteEVM(), addr)
 		activity   = Activity{
 			{Button: 0, Press: false, Duration: 100_000},
+			{Button: 3, Press: true, Duration: 100_000},
+			{Button: 3, Press: false, Duration: 1_000_000},
 		}
 	)
 

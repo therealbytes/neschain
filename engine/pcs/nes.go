@@ -70,7 +70,7 @@ func (p *runPrecompile) RequiredGas(input []byte) uint64 {
 		for _, action := range activity {
 			totalDuration += action.Duration
 		}
-		return 500_000 + uint64(nActions)*100 + uint64(totalDuration)*3
+		return 500_000 + uint64(nActions)*100 + uint64(totalDuration)/2
 	}, input)
 }
 

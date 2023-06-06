@@ -51,8 +51,9 @@ func runActivity(console *nes.Console, activity Activity) {
 			buttons[action.Button] = action.Press
 		}
 		console.Controller1.SetButtons(buttons)
-		for ii := 0; ii < int(action.Duration); ii++ {
-			console.Step()
+		cycles := int(action.Duration)
+		for cycles > 0 {
+			cycles -= console.Step()
 		}
 	}
 }

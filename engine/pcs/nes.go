@@ -90,7 +90,7 @@ func (p *runPrecompile) Run(concrete api.API, input []byte) ([]byte, error) {
 			return nil, errors.New("invalid dynamic hash")
 		}
 
-		console, err := nes.NewHeadlessConsole(static, dyn, false, false)
+		console, err := nes.NewHeadlessConsole(static, dyn, false)
 		if err != nil {
 			return nil, err
 		}

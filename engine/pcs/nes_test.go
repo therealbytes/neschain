@@ -60,7 +60,7 @@ func TestRun(t *testing.T) {
 
 		refStatic := preimageStore.GetPreimage(staticHash)
 		refInDyn := preimageStore.GetPreimage(dynHash)
-		refNes, err := nes.NewHeadlessConsole(refStatic, refInDyn, false, false)
+		refNes, err := nes.NewHeadlessConsole(refStatic, refInDyn, false)
 		if err != nil {
 			t.Fatal(err)
 		}

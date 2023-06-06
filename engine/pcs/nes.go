@@ -44,7 +44,7 @@ func init() {
 	NESPrecompile = lib.NewPrecompileWithABI(ABI, map[string]lib.MethodPrecompile{"run": &runPrecompile{}})
 }
 
-func runActivity(console *nes.Console, activity Activity) error {
+func runActivity(console *nes.Console, activity Activity) {
 	buttons := [8]bool{}
 	for _, action := range activity {
 		if action.Button < 8 {
@@ -55,7 +55,6 @@ func runActivity(console *nes.Console, activity Activity) error {
 			console.Step()
 		}
 	}
-	return nil
 }
 
 type runPrecompile struct {

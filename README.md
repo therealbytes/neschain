@@ -1,4 +1,4 @@
-```
+```bash
 ├── engine
 │   ├── main.go             # Concrete app-chain setup
 │   ├── main_test.go        # Concrete app-chain setup minimal test
@@ -14,4 +14,4 @@
     └── NES.sol # Precompile solidity interface
 ```
 
-Check out [Concrete](https://github.com/therealbytes/concrete-geth).
+_Check out [Concrete](https://github.com/therealbytes/concrete-geth), a framework to build application-specific rollups like this one._

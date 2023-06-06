@@ -833,8 +833,8 @@ github.com/tetratelabs/wazero v1.1.0 h1:EByoAhC+QcYpwSZJSs/aV0uokxPwBgKxfiokSUwA
 github.com/tetratelabs/wazero v1.1.0/go.mod h1:wYx2gNRg8/WihJfSDxA1TIL8H+GkfLYm+bIfbblu9VQ=
 github.com/therealbytes/concrete-geth v0.0.0-20230605155849-07e6a65d56c4 h1:182eilkt4ceUf1iUC/46m4BTwOV1vQGONu+PGKiGw9M=
 github.com/therealbytes/concrete-geth v0.0.0-20230605155849-07e6a65d56c4/go.mod h1:rqG8+GYvAqMwiqJ2e9+/E0QwSiRcwYmPRUDblWxn8xo=
-github.com/therealbytes/nes v0.0.0-20230529152044-bd334b2d1049 h1:CF4lkTFL7ADkAkoQB/2hB/lwfd68LCI3tVq3vqe+v0I=
-github.com/therealbytes/nes v0.0.0-20230529152044-bd334b2d1049/go.mod h1:ziwtMUbMCbnfpRS7uc9FOELgxDAFUKsZbhLQFkHu7r0=
+github.com/therealbytes/nes v0.0.0-20230606125333-c59cb6e8c7bf h1:FKf2A5Q8SFaBMBcZ6BtH/ZvPA3wobvaoJZwBdhTA1/Y=
+github.com/therealbytes/nes v0.0.0-20230606125333-c59cb6e8c7bf/go.mod h1:ziwtMUbMCbnfpRS7uc9FOELgxDAFUKsZbhLQFkHu7r0=
 github.com/tinylib/msgp v1.0.2/go.mod h1:+d+yLhGm8mzTaHzB+wgMYrodPfmZrzkirds8fDWklFE=
 github.com/tklauser/go-sysconf v0.3.5/go.mod h1:MkWzOF4RMCshBAMXuhXJs64Rte09mITnppBXY/rYEFI=
 github.com/tklauser/go-sysconf v0.3.10 h1:IJ1AZGZRWbY8T5Vfk04D9WOA5WSejdflXxP03OUqALw=

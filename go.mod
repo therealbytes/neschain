@@ -2,7 +2,7 @@ module github.com/therealbytes/neschain
 
 go 1.18
 
-replace github.com/fogleman/nes => github.com/therealbytes/nes v0.0.0-20230606125333-c59cb6e8c7bf
+replace github.com/fogleman/nes => github.com/therealbytes/nes v0.0.0-20230606125633-018c99086be8
 
 replace github.com/ethereum/go-ethereum => github.com/therealbytes/concrete-geth v0.0.0-20230605155849-07e6a65d56c4
 

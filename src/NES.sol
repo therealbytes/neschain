@@ -22,8 +22,8 @@ struct Action {
 
 interface NES {
     function run(
-        bytes32 staticHash,
-        bytes32 dynHash,
+        bytes32 staticRoot,
+        bytes32 dynRoot,
         Action[] memory activity
     ) external returns (bytes32);
 }

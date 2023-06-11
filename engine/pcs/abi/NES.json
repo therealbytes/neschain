@@ -4,12 +4,12 @@
       "inputs": [
         {
           "internalType": "bytes32",
-          "name": "staticHash",
+          "name": "staticRoot",
           "type": "bytes32"
         },
         {
           "internalType": "bytes32",
-          "name": "dynHash",
+          "name": "dynRoot",
           "type": "bytes32"
         },
         {
@@ -60,10 +60,10 @@
   "methodIdentifiers": {
     "run(bytes32,bytes32,(uint8,bool,uint32)[])": "17824ad4"
   },
-  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.15+commit.e14f2714\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"staticHash\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"dynHash\",\"type\":\"bytes32\"},{\"components\":[{\"internalType\":\"enum Button\",\"name\":\"button\",\"type\":\"uint8\"},{\"internalType\":\"bool\",\"name\":\"press\",\"type\":\"bool\"},{\"internalType\":\"uint32\",\"name\":\"duration\",\"type\":\"uint32\"}],\"internalType\":\"struct Action[]\",\"name\":\"activity\",\"type\":\"tuple[]\"}],\"name\":\"run\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/NES.sol\":\"NES\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[\":ds-test/=lib/forge-std/lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\"]},\"sources\":{\"src/NES.sol\":{\"keccak256\":\"0xd0f4a9777159c155a98395ff81d81a14e1fa3edc5475000a510b6e5528f2b36a\",\"license\":\"UNLICENSED\",\"urls\":[\"bzz-raw://211da641fb0067ca5c8f55f753ace4fe8618fbc6e288d1f7356e414ab3993eab\",\"dweb:/ipfs/QmWzEFiUvxWrEeAxH1b6Q43oBbB7mxDncSToB4eESZaJKE\"]}},\"version\":1}",
+  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.19+commit.7dd6d404\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"staticRoot\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"dynRoot\",\"type\":\"bytes32\"},{\"components\":[{\"internalType\":\"enum Button\",\"name\":\"button\",\"type\":\"uint8\"},{\"internalType\":\"bool\",\"name\":\"press\",\"type\":\"bool\"},{\"internalType\":\"uint32\",\"name\":\"duration\",\"type\":\"uint32\"}],\"internalType\":\"struct Action[]\",\"name\":\"activity\",\"type\":\"tuple[]\"}],\"name\":\"run\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/NES.sol\":\"NES\"},\"evmVersion\":\"paris\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[\":ds-test/=lib/forge-std/lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\"]},\"sources\":{\"src/NES.sol\":{\"keccak256\":\"0xd3f92d03ef6c81ec0a9160aae6eb94031abfe4b2dcb5b22edc62a399403333c6\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://a23f4676126fe25550ef3128b3dc158367bb9a7c36c0032d81533d7eeea597b9\",\"dweb:/ipfs/QmP65vCSwNhMkFfnsWA9cMbz17NpndM1A44RFSZAErnYoP\"]}},\"version\":1}",
   "metadata": {
     "compiler": {
-      "version": "0.8.15+commit.e14f2714"
+      "version": "0.8.19+commit.7dd6d404"
     },
     "language": "Solidity",
     "output": {
@@ -72,12 +72,12 @@
           "inputs": [
             {
               "internalType": "bytes32",
-              "name": "staticHash",
+              "name": "staticRoot",
               "type": "bytes32"
             },
             {
               "internalType": "bytes32",
-              "name": "dynHash",
+              "name": "dynRoot",
               "type": "bytes32"
             },
             {
@@ -145,12 +145,12 @@
     },
     "sources": {
       "src/NES.sol": {
-        "keccak256": "0xd0f4a9777159c155a98395ff81d81a14e1fa3edc5475000a510b6e5528f2b36a",
+        "keccak256": "0xd3f92d03ef6c81ec0a9160aae6eb94031abfe4b2dcb5b22edc62a399403333c6",
         "urls": [
-          "bzz-raw://211da641fb0067ca5c8f55f753ace4fe8618fbc6e288d1f7356e414ab3993eab",
-          "dweb:/ipfs/QmWzEFiUvxWrEeAxH1b6Q43oBbB7mxDncSToB4eESZaJKE"
+          "bzz-raw://a23f4676126fe25550ef3128b3dc158367bb9a7c36c0032d81533d7eeea597b9",
+          "dweb:/ipfs/QmP65vCSwNhMkFfnsWA9cMbz17NpndM1A44RFSZAErnYoP"
         ],
-        "license": "UNLICENSED"
+        "license": "MIT"
       }
     },
     "version": 1
@@ -173,29 +173,29 @@
       ]
     },
     "nodeType": "SourceUnit",
-    "src": "39:396:0",
+    "src": "32:395:0",
     "nodes": [
       {
         "id": 1,
         "nodeType": "PragmaDirective",
-        "src": "39:24:0",
+        "src": "32:23:0",
         "nodes": [],
         "literals": [
           "solidity",
           "^",
           "0.8",
-          ".13"
+          ".0"
         ]
       },
       {
         "id": 7,
         "nodeType": "VariableDeclaration",
-        "src": "65:44:0",
+        "src": "57:44:0",
         "nodes": [],
         "constant": true,
         "mutability": "constant",
         "name": "NES_ADDRESS",
-        "nameLocation": "82:11:0",
+        "nameLocation": "74:11:0",
         "scope": 39,
         "stateVariable": false,
         "storageLocation": "default",
@@ -207,7 +207,7 @@
           "id": 2,
           "name": "address",
           "nodeType": "ElementaryTypeName",
-          "src": "65:7:0",
+          "src": "57:7:0",
           "stateMutability": "nonpayable",
           "typeDescriptions": {
             "typeIdentifier": "t_address",
@@ -225,7 +225,7 @@
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "104:4:0",
+              "src": "96:4:0",
               "typeDescriptions": {
                 "typeIdentifier": "t_rational_128_by_1",
                 "typeString": "int_const 128"
@@ -246,7 +246,7 @@
             "isPure": true,
             "lValueRequested": false,
             "nodeType": "ElementaryTypeNameExpression",
-            "src": "96:7:0",
+            "src": "88:7:0",
             "typeDescriptions": {
               "typeIdentifier": "t_type$_t_address_$",
               "typeString": "type(address)"
@@ -255,7 +255,7 @@
               "id": 3,
               "name": "address",
               "nodeType": "ElementaryTypeName",
-              "src": "96:7:0",
+              "src": "88:7:0",
               "typeDescriptions": {}
             }
           },
@@ -265,9 +265,10 @@
           "isPure": true,
           "kind": "typeConversion",
           "lValueRequested": false,
+          "nameLocations": [],
           "names": [],
           "nodeType": "FunctionCall",
-          "src": "96:13:0",
+          "src": "88:13:0",
           "tryCall": false,
           "typeDescriptions": {
             "typeIdentifier": "t_address",
@@ -279,74 +280,74 @@
       {
         "id": 16,
         "nodeType": "EnumDefinition",
-        "src": "112:90:0",
+        "src": "104:90:0",
         "nodes": [],
         "canonicalName": "Button",
         "members": [
           {
             "id": 8,
             "name": "A",
-            "nameLocation": "130:1:0",
+            "nameLocation": "122:1:0",
             "nodeType": "EnumValue",
-            "src": "130:1:0"
+            "src": "122:1:0"
           },
           {
             "id": 9,
             "name": "B",
-            "nameLocation": "137:1:0",
+            "nameLocation": "129:1:0",
             "nodeType": "EnumValue",
-            "src": "137:1:0"
+            "src": "129:1:0"
           },
           {
             "id": 10,
             "name": "Select",
-            "nameLocation": "144:6:0",
+            "nameLocation": "136:6:0",
             "nodeType": "EnumValue",
-            "src": "144:6:0"
+            "src": "136:6:0"
           },
           {
             "id": 11,
             "name": "Start",
-            "nameLocation": "156:5:0",
+            "nameLocation": "148:5:0",
             "nodeType": "EnumValue",
-            "src": "156:5:0"
+            "src": "148:5:0"
           },
           {
             "id": 12,
             "name": "Up",
-            "nameLocation": "167:2:0",
+            "nameLocation": "159:2:0",
             "nodeType": "EnumValue",
-            "src": "167:2:0"
+            "src": "159:2:0"
           },
           {
             "id": 13,
             "name": "Down",
-            "nameLocation": "175:4:0",
+            "nameLocation": "167:4:0",
             "nodeType": "EnumValue",
-            "src": "175:4:0"
+            "src": "167:4:0"
           },
           {
             "id": 14,
             "name": "Left",
-            "nameLocation": "185:4:0",
+            "nameLocation": "177:4:0",
             "nodeType": "EnumValue",
-            "src": "185:4:0"
+            "src": "177:4:0"
           },
           {
             "id": 15,
             "name": "Right",
-            "nameLocation": "195:5:0",
+            "nameLocation": "187:5:0",
             "nodeType": "EnumValue",
-            "src": "195:5:0"
+            "src": "187:5:0"
           }
         ],
         "name": "Button",
-        "nameLocation": "117:6:0"
+        "nameLocation": "109:6:0"
       },
       {
         "id": 24,
         "nodeType": "StructDefinition",
-        "src": "204:73:0",
+        "src": "196:73:0",
         "nodes": [],
         "canonicalName": "Action",
         "members": [
@@ -355,10 +356,10 @@
             "id": 19,
             "mutability": "mutable",
             "name": "button",
-            "nameLocation": "231:6:0",
+            "nameLocation": "223:6:0",
             "nodeType": "VariableDeclaration",
             "scope": 24,
-            "src": "224:13:0",
+            "src": "216:13:0",
             "stateVariable": false,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -371,12 +372,15 @@
               "pathNode": {
                 "id": 17,
                 "name": "Button",
+                "nameLocations": [
+                  "216:6:0"
+                ],
                 "nodeType": "IdentifierPath",
                 "referencedDeclaration": 16,
-                "src": "224:6:0"
+                "src": "216:6:0"
               },
               "referencedDeclaration": 16,
-              "src": "224:6:0",
+              "src": "216:6:0",
               "typeDescriptions": {
                 "typeIdentifier": "t_enum$_Button_$16",
                 "typeString": "enum Button"
@@ -389,10 +393,10 @@
             "id": 21,
             "mutability": "mutable",
             "name": "press",
-            "nameLocation": "248:5:0",
+            "nameLocation": "240:5:0",
             "nodeType": "VariableDeclaration",
             "scope": 24,
-            "src": "243:10:0",
+            "src": "235:10:0",
             "stateVariable": false,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -403,7 +407,7 @@
               "id": 20,
               "name": "bool",
               "nodeType": "ElementaryTypeName",
-              "src": "243:4:0",
+              "src": "235:4:0",
               "typeDescriptions": {
                 "typeIdentifier": "t_bool",
                 "typeString": "bool"
@@ -416,10 +420,10 @@
             "id": 23,
             "mutability": "mutable",
             "name": "duration",
-            "nameLocation": "266:8:0",
+            "nameLocation": "258:8:0",
             "nodeType": "VariableDeclaration",
             "scope": 24,
-            "src": "259:15:0",
+            "src": "251:15:0",
             "stateVariable": false,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -430,7 +434,7 @@
               "id": 22,
               "name": "uint32",
               "nodeType": "ElementaryTypeName",
-              "src": "259:6:0",
+              "src": "251:6:0",
               "typeDescriptions": {
                 "typeIdentifier": "t_uint32",
                 "typeString": "uint32"
@@ -440,26 +444,26 @@
           }
         ],
         "name": "Action",
-        "nameLocation": "211:6:0",
+        "nameLocation": "203:6:0",
         "scope": 39,
         "visibility": "public"
       },
       {
         "id": 38,
         "nodeType": "ContractDefinition",
-        "src": "279:155:0",
+        "src": "271:155:0",
         "nodes": [
           {
             "id": 37,
             "nodeType": "FunctionDefinition",
-            "src": "299:133:0",
+            "src": "291:133:0",
             "nodes": [],
             "functionSelector": "17824ad4",
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "run",
-            "nameLocation": "308:3:0",
+            "nameLocation": "300:3:0",
             "parameters": {
               "id": 33,
               "nodeType": "ParameterList",
@@ -468,11 +472,11 @@
                   "constant": false,
                   "id": 26,
                   "mutability": "mutable",
-                  "name": "staticHash",
-                  "nameLocation": "329:10:0",
+                  "name": "staticRoot",
+                  "nameLocation": "321:10:0",
                   "nodeType": "VariableDeclaration",
                   "scope": 37,
-                  "src": "321:18:0",
+                  "src": "313:18:0",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -483,7 +487,7 @@
                     "id": 25,
                     "name": "bytes32",
                     "nodeType": "ElementaryTypeName",
-                    "src": "321:7:0",
+                    "src": "313:7:0",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bytes32",
                       "typeString": "bytes32"
@@ -495,11 +499,11 @@
                   "constant": false,
                   "id": 28,
                   "mutability": "mutable",
-                  "name": "dynHash",
-                  "nameLocation": "357:7:0",
+                  "name": "dynRoot",
+                  "nameLocation": "349:7:0",
                   "nodeType": "VariableDeclaration",
                   "scope": 37,
-                  "src": "349:15:0",
+                  "src": "341:15:0",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -510,7 +514,7 @@
                     "id": 27,
                     "name": "bytes32",
                     "nodeType": "ElementaryTypeName",
-                    "src": "349:7:0",
+                    "src": "341:7:0",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bytes32",
                       "typeString": "bytes32"
@@ -523,10 +527,10 @@
                   "id": 32,
                   "mutability": "mutable",
                   "name": "activity",
-                  "nameLocation": "390:8:0",
+                  "nameLocation": "382:8:0",
                   "nodeType": "VariableDeclaration",
                   "scope": 37,
-                  "src": "374:24:0",
+                  "src": "366:24:0",
                   "stateVariable": false,
                   "storageLocation": "memory",
                   "typeDescriptions": {
@@ -540,12 +544,15 @@
                       "pathNode": {
                         "id": 29,
                         "name": "Action",
+                        "nameLocations": [
+                          "366:6:0"
+                        ],
                         "nodeType": "IdentifierPath",
                         "referencedDeclaration": 24,
-                        "src": "374:6:0"
+                        "src": "366:6:0"
                       },
                       "referencedDeclaration": 24,
-                      "src": "374:6:0",
+                      "src": "366:6:0",
                       "typeDescriptions": {
                         "typeIdentifier": "t_struct$_Action_$24_storage_ptr",
                         "typeString": "struct Action"
@@ -553,7 +560,7 @@
                     },
                     "id": 31,
                     "nodeType": "ArrayTypeName",
-                    "src": "374:8:0",
+                    "src": "366:8:0",
                     "typeDescriptions": {
                       "typeIdentifier": "t_array$_t_struct$_Action_$24_storage_$dyn_storage_ptr",
                       "typeString": "struct Action[]"
@@ -562,7 +569,7 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "311:93:0"
+              "src": "303:93:0"
             },
             "returnParameters": {
               "id": 36,
@@ -576,7 +583,7 @@
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
                   "scope": 37,
-                  "src": "423:7:0",
+                  "src": "415:7:0",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -587,7 +594,7 @@
                     "id": 34,
                     "name": "bytes32",
                     "nodeType": "ElementaryTypeName",
-                    "src": "423:7:0",
+                    "src": "415:7:0",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bytes32",
                       "typeString": "bytes32"
@@ -596,7 +603,7 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "422:9:0"
+              "src": "414:9:0"
             },
             "scope": 38,
             "stateMutability": "nonpayable",
@@ -614,12 +621,12 @@
           38
         ],
         "name": "NES",
-        "nameLocation": "289:3:0",
+        "nameLocation": "281:3:0",
         "scope": 39,
         "usedErrors": []
       }
     ],
-    "license": "UNLICENSED"
+    "license": "MIT"
   },
   "id": 0
 }

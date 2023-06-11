@@ -36,11 +36,11 @@ func TestRun(t *testing.T) {
 
 	preimageStore := api.NewPersistentBigPreimageStore(concrete, Radix, LeafSize)
 
-	staticHash := preimageStore.AddPreimage(testStatic)
-	dynHash := preimageStore.AddPreimage(testDyn)
+	staticRoot := preimageStore.AddPreimage(testStatic)
+	dynRoot := preimageStore.AddPreimage(testDyn)
 
 	for ii := 0; ii < 3; ii++ {
-		input, err := ABI.Pack("run", staticHash, dynHash, activity)
+		input, err := ABI.Pack("run", staticRoot, dynRoot, activity)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -48,18 +48,18 @@ func TestRun(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		_outDynHash, err := ABI.Unpack("run", output)
+		_outDynRoot, err := ABI.Unpack("run", output)
 		if err != nil {
 			t.Fatal(err)
 		}
-		outDynHash := common.Hash(_outDynHash[0].([32]byte))
-		if !preimageStore.HasPreimage(outDynHash) {
+		outDynRoot := common.Hash(_outDynRoot[0].([32]byte))
+		if !preimageStore.HasPreimage(outDynRoot) {
 			t.Fatal("preimage not added")
 		}
-		outDyn := preimageStore.GetPreimage(outDynHash)
+		outDyn := preimageStore.GetPreimage(outDynRoot)
 
-		refStatic := preimageStore.GetPreimage(staticHash)
-		refInDyn := preimageStore.GetPreimage(dynHash)
+		refStatic := preimageStore.GetPreimage(staticRoot)
+		refInDyn := preimageStore.GetPreimage(dynRoot)
 		refNes, err := nes.NewHeadlessConsole(refStatic, refInDyn, false)
 		if err != nil {
 			t.Fatal(err)
@@ -77,6 +77,6 @@ func TestRun(t *testing.T) {
 			t.Fatal("dyn mismatch")
 		}
 
-		dynHash = outDynHash
+		dynRoot = outDynRoot
 	}
 }

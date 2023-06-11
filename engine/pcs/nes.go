@@ -76,19 +76,19 @@ func (p *runPrecompile) RequiredGas(input []byte) uint64 {
 
 func (p *runPrecompile) Run(concrete api.API, input []byte) ([]byte, error) {
 	return p.CallRunWithArgs(func(concrete api.API, args []interface{}) ([]interface{}, error) {
-		staticHash := common.Hash(args[0].([32]byte))
-		dynHash := common.Hash(args[1].([32]byte))
+		staticRoot := common.Hash(args[0].([32]byte))
+		dynRoot := common.Hash(args[1].([32]byte))
 		activity := args[2].(Activity)
 
 		preimageStore := api.NewPersistentBigPreimageStore(concrete, Radix, LeafSize)
 
-		static := preimageStore.GetPreimage(staticHash)
+		static := preimageStore.GetPreimage(staticRoot)
 		if len(static) == 0 {
-			return nil, errors.New("invalid static hash")
+			return nil, errors.New("invalid static root")
 		}
-		dyn := preimageStore.GetPreimage(dynHash)
+		dyn := preimageStore.GetPreimage(dynRoot)
 		if len(dyn) == 0 {
-			return nil, errors.New("invalid dynamic hash")
+			return nil, errors.New("invalid dynamic root")
 		}
 
 		console, err := nes.NewHeadlessConsole(static, dyn, false)
@@ -101,8 +101,8 @@ func (p *runPrecompile) Run(concrete api.API, input []byte) ([]byte, error) {
 		if err != nil {
 			return nil, err
 		}
-		dynHash = preimageStore.AddPreimage(dyn)
+		dynRoot = preimageStore.AddPreimage(dyn)
 
-		return []interface{}{dynHash}, nil
+		return []interface{}{dynRoot}, nil
 	}, concrete, input)
 }
